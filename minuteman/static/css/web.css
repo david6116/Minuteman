@@ -1,0 +1,47 @@
+body {
+    font-size: 15pt;
+    color: #020202;
+    background: #dcffff;
+    background-image: url('../img/rocketsmall.png');
+    background-image;
+    background-position: 1% 5%;
+    background-repeat: no-repeat;
+    font-family: arial, helvetica;
+}
+
+h1 {
+    font-size: 50%;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+#form{
+    padding-top: 20px;
+    text-align: center;
+}
+
+.howto{
+    list-style-image: url('../img/Bullet-y-small2.png');
+    padding-left: 175px;
+
+}
+
+.messages{
+    list-style: none;
+}
+
+.current_log{
+    text: center;
+}
+
+#user {
+    text-align: right;
+
+}
+
+#table{
+    text-align: center;
+    padding-left: 200px;
+
+}

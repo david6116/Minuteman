@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Minuteman Time Keeper</title>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery-1.7.1.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/web.css" />
+
+</head>
+<body>
+
+<h1 id='time'>Today is {% now "l, F jS" %}</h1>
+
+    <p id='user'>
+        Hello {{ user.get_full_name }}
+        <br />
+        <a href="/logout/">Need to log out?</a>
+    </p>
+
+<ul class='howto'> <ul><ul>
+    <li>Select your desired project.</li>
+    <li>Click get started! :-)</li>
+</ul></ul></ul>
+
+
+<div id="form">
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if current_log %}
+
+        You have been working on {{ current_log.project }} for {{ current_log.start|timesince }}
+        <form action="/dashboard/" method="post" class='startstop'>{% csrf_token %}
+        <input type='hidden' value="{{ current_log.project.id }}" name="project">
+        <input type='hidden' value="{{ current_log.contractor.id }}" name="contractor">
+        <input type="submit" value="I'm done!" name='stop' />
+        </form>
+
+    {% else %}
+
+        <form action="/dashboard/" method="post" class='startstop'>{% csrf_token %}
+
+            <select name='project'>
+                {% for each_project in projects %}
+                <option value="{{ each_project.id }}">{{ each_project.name }}</option>
+                {% endfor %}
+            </select>
+
+        <input type="hidden" value="{{ user.contractor.id }}" name="contractor">
+        <input type="submit" value="Get Started" name='start' />
+        </form>
+
+    {% endif %}
+
+</div>
+
+<div id='table'>
+    <table>
+        <tr>
+            <th>Project</th>
+            <th>Client</th>
+            <th>Time spent</th>
+        </tr>
+
+            {% for each_row in lastfive %}
+        <tr>
+            <td>{{ each_row.project }}</td>
+            <td>{{ each_row.project.client }}</td>
+            <td>{{ each_row.duration }}</td>
+        </tr>
+            {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+</html>
