@@ -1,34 +1,61 @@
 body {
     font-size: 15pt;
     color: #020202;
-    background: #dcffff;
+    background: #E8ECFF;
     background-image: url('../img/rocketsmall.png');
-    background-image;
-    background-position: 1% 5%;
+    background-position: 0% 0%;
     background-repeat: no-repeat;
     font-family: arial, helvetica;
 }
 
 h1 {
-    font-size: 50%;
+    font-size: 75%;
     text-align: center;
     margin-top: 5px;
     margin-bottom: 0;
 }
 
-#form{
-    padding-top: 20px;
-    text-align: center;
+#logout{
+    font-size: 7pt;
 }
 
-.howto{
-    list-style-image: url('../img/Bullet-y-small2.png');
-    padding-left: 175px;
+#newproject{
+    background-color: #FFFABF;
+    border: 1px solid;
+    border-collapse: collapse;
+    width: 65%;
+    text-align: center;
+    margin-left:auto;
+    margin-right:auto;
+    box-shadow: 1px 1px 8px 1px #00273A;
+}
 
+#textfield{
+    padding: 0px;
+    margin: 0px;
+    element: 0
+}
+
+#text{
+    width: 600px;
+    height: 22px;
+    padding: 0px;
+    margin: 0px;
+    border: 0;
+}
+
+#npsecondrow{
+    background-color: #D4EADE;
+}
+
+.oneliner{
+    text-align: center;
 }
 
 .messages{
     list-style: none;
+    padding-top: 20px;
+    text-align: center;
 }
 
 .current_log{
@@ -37,11 +64,32 @@ h1 {
 
 #user {
     text-align: right;
-
 }
 
-#table{
+#projects{
+    border: 1px solid;
+    border-collapse: collapse;
+    width: 100%;
     text-align: center;
-    padding-left: 200px;
+    box-shadow: 1px 1px 8px 1px #00273a;
+}
+
+#projects tr#pfirstrow{
+    background-color: #FFFABF;
+}
+
+.row1{
+    background: #D4EADE
+}
+
+.row2{
+    background: #d5e2ec;
+}
+
+td, th{
+    border: 1px solid;
+}
+
+.table{
 
 }

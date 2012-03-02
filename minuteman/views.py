@@ -8,7 +8,7 @@ from django.template import RequestContext
 
 from minuteman.models import *
 
-@login_required(redirect_field_name='/login/')
+@login_required()
 def dashboard(request):
 
     if request.method == 'POST':
@@ -19,7 +19,12 @@ def dashboard(request):
         project_id = request.POST['project']
         project = Project.objects.get(pk=int(project_id))
 
+
+
         if 'start' in request.POST:
+
+            comments = request.POST['comments']
+
             try:
                 current_project = Log.objects.get(contractor=contractor, stop=None).project
                 if current_project == project:
@@ -33,7 +38,7 @@ def dashboard(request):
                     )
 
             except Log.DoesNotExist:
-                log = Log(contractor=contractor, project=project, start=datetime.now(), stop=None)
+                log = Log(contractor=contractor, project=project, start=datetime.now(), stop=None, comments=comments)
                 log.save()
                 messages.success(request,
                     'Use your abilities at this time to stay focused on your goals. Log recorded'
@@ -41,7 +46,7 @@ def dashboard(request):
 
         elif 'stop' in request.POST:
             try:
-                current_log = Log.objects.get(contractor=contractor, stop=None)
+                current_log = Log.objects.get(contractor=contractor, stop=None )
                 if current_log.project == project:
                     current_log.stop = datetime.now()
                     current_log.save()
@@ -58,6 +63,20 @@ def dashboard(request):
                     'Whoa! You worked so fast you forgot to hit start first, try again.'
                 )
 
+        elif 'resume' in request.POST:
+
+            current_log = Log.objects.get(contractor=contractor, stop=None)
+            current_log.stop = datetime.now()
+            current_log.save()
+
+            log = Log(contractor=contractor, project=project, start=datetime.now(), stop=None)
+            log.save()
+
+            messages.warning(request,
+                "Ending %s and Resuming %s" % (current_log.project, log.project)
+            )
+
+
         return HttpResponseRedirect('/dashboard/')
 
     try:
@@ -66,7 +85,7 @@ def dashboard(request):
         current_log = None
 
     lastfive = Log.objects.filter(contractor__user=request.user)
-    lastfive = lastfive.reverse()[1:6]
+    lastfive = lastfive.reverse()[:5]
     contractors = Contractor.objects.all()
     projects = Project.objects.all()
 
@@ -79,3 +98,24 @@ def dashboard(request):
 
     return render_to_response('minuteman/dashboard.html', context,
                               context_instance=RequestContext(request))
+
+
+
+
+
+
+@login_required()
+def project_list(request):
+
+    info = request.user
+    projects = Project.objects.filter(contractor=request.user.id)
+
+
+    context = {
+        'info' : info,
+        'projects' : projects,
+
+    }
+
+    return render_to_response('minuteman/project_list.html', context,
+        context_instance=RequestContext(request))

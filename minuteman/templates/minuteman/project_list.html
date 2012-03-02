@@ -2,12 +2,12 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>{{ title }} - </title>
+    <title>{{ info.first_name }}'s Projects</title>
 </head>
 <body>
-
-{% block content %}
-{% endblock content %}
+{% for each_item in projects %}
+{{each_item}}
+{% endfor %}
 
 </body>
 </html>
