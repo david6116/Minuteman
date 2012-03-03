@@ -3,22 +3,32 @@ body {
     color: #020202;
     background: #E8ECFF;
     background-image: url('../img/rocketsmall.png');
-    background-position: 0% 0%;
+    background-position: 0% 0% top;
     background-repeat: no-repeat;
     font-family: arial, helvetica;
 }
 
+#navbar{
+
+    margin: auto;
+    text-align: right;
+}
+.navbarlist
+{
+    display:block;
+    display:inline;
+    padding-right: 30px;
+    background-size: 100%
+}
 h1 {
     font-size: 75%;
     text-align: center;
     margin-top: 5px;
     margin-bottom: 0;
 }
-
 #logout{
     font-size: 7pt;
 }
-
 #newproject{
     background-color: #FFFABF;
     border: 1px solid;
@@ -29,13 +39,11 @@ h1 {
     margin-right:auto;
     box-shadow: 1px 1px 8px 1px #00273A;
 }
-
 #textfield{
     padding: 0px;
     margin: 0px;
     element: 0
 }
-
 #text{
     width: 600px;
     height: 22px;
@@ -43,29 +51,23 @@ h1 {
     margin: 0px;
     border: 0;
 }
-
 #npsecondrow{
     background-color: #D4EADE;
 }
-
 .oneliner{
     text-align: center;
 }
-
 .messages{
     list-style: none;
     padding-top: 20px;
     text-align: center;
 }
-
 .current_log{
     text: center;
 }
-
 #user {
     text-align: right;
 }
-
 #projects{
     border: 1px solid;
     border-collapse: collapse;
@@ -73,23 +75,18 @@ h1 {
     text-align: center;
     box-shadow: 1px 1px 8px 1px #00273a;
 }
-
 #projects tr#pfirstrow{
     background-color: #FFFABF;
 }
-
 .row1{
     background: #D4EADE
 }
-
 .row2{
     background: #d5e2ec;
 }
-
 td, th{
     border: 1px solid;
 }
-
 .table{
 
 }

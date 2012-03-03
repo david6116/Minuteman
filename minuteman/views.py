@@ -1,4 +1,5 @@
 from datetime import datetime
+from GChartWrapper import *
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -97,25 +98,55 @@ def dashboard(request):
     }
 
     return render_to_response('minuteman/dashboard.html', context,
-                              context_instance=RequestContext(request))
+                                context_instance=RequestContext(request))
 
 
-
-
-
+#-------------------------------------------------------------------------------------------------------------------
 
 @login_required()
 def project_list(request):
 
-    info = request.user
-    projects = Project.objects.filter(contractor=request.user.id)
+    projects = Project.objects.all()
+
+
+    summary_name = []
+    summary_info = []
+
+
+    for each_item in projects:
+        summary_name.append(each_item.name)
+
+    for i in range(len(summary_name)):
+        logs = Log.objects.filter(contractor=request.user, project=summary_name[i])
+        fff = {}
+        if i == 0:
+            pass
+        else:
+            summary_info = plcehldr
+
+        for each_project_log in logs:
+            plcehldr = timedelta(0)
+            plcehldr = plcehldr +each_project_log.duration
+
+
+
+
+
 
 
     context = {
-        'info' : info,
-        'projects' : projects,
+        'summary_name' : summary_name,
+        'summary_info' : summary_info,
 
     }
 
-    return render_to_response('minuteman/project_list.html', context,
-        context_instance=RequestContext(request))
+    return render_to_response('minuteman/project_summary.html', context,
+                                context_instance=RequestContext(request))
+
+
+
+
+
+#------------------------------------------------------------------------------------------------------------------
+
+

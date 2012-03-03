@@ -8,7 +8,19 @@
 
 </head>
 <body>
-<ul id='bar'>.</ul>
+
+<div id='navbar'>
+    <ul>
+        <li class='navbarlist'><a href="/{{ static_url }}dashboard/">Your Dashboard</a></li>
+        <li class='navbarlist'><a href="/project_summary/">Project Summary</a></li>
+        <li class='navbarlist'><a href="/admin">Admin</a></li>
+        {% if user.is_authenticated %}
+        <li class='navbarlist'><a href="/logout/">Logout</a></li>
+        {% else %}
+        <li class='navbarlist'><a href="/login/">Log in</a></li>
+        {% endif %}
+    </ul>
+</div>
 
 <h1 id='time'>Today is {% now "l, F jS" %}</h1>
 

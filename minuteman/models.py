@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import *
 
 from django.db import models
 
@@ -21,6 +21,20 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def summary(self):
+
+        sum_total = timedelta(0)
+        project_req_logs = Log.objects.filter(project=self)
+
+        for each_item in project_req_logs:
+            sum_total += each_item.duration
+
+        return sum_total
+
+
+
+
 
 class Contractor(models.Model):
     name = models.CharField(max_length=128)
@@ -53,8 +67,6 @@ class Log(models.Model):
         else:
             difference = self.stop - self.start
         return difference
-
-
 
 
 

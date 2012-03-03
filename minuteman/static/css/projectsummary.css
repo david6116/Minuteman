@@ -1,0 +1,12 @@
+#navbar{
+    margin: auto;
+    text-align: right;
+}
+
+.navbarlist
+{
+    display:block;
+    display:inline;
+    padding-right: 30px;
+    background-size: 100%
+}
