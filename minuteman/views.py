@@ -20,8 +20,6 @@ def dashboard(request):
         project_id = request.POST['project']
         project = Project.objects.get(pk=int(project_id))
 
-
-
         if 'start' in request.POST:
 
             comments = request.POST['comments']
@@ -35,7 +33,7 @@ def dashboard(request):
 
                 else:
                     messages.warning(request,
-                        "We would all like to get paid twice as much, but this isn't the way to do. End %s first." % current_project
+                        "We would all like to get paid twice as much, but this isn't the way to do it. End %s first." % current_project
                     )
 
             except Log.DoesNotExist:
@@ -52,7 +50,7 @@ def dashboard(request):
                     current_log.stop = datetime.now()
                     current_log.save()
                     messages.success(request,
-                        'I made you cookie, but i eated it already.'
+                        'I made you a cookie, but I eated it already.'
                     )
                 else:
                     messages.warning(request,
@@ -77,7 +75,6 @@ def dashboard(request):
                 "Ending %s and Resuming %s" % (current_log.project, log.project)
             )
 
-
         return HttpResponseRedirect('/dashboard/')
 
     try:
@@ -88,7 +85,7 @@ def dashboard(request):
     lastfive = Log.objects.filter(contractor__user=request.user)
     lastfive = lastfive.reverse()[:5]
     contractors = Contractor.objects.all()
-    projects = Project.objects.all()
+    projects = Project.objects.all().select_related()
 
     context = {
         'projects': projects,
@@ -99,54 +96,30 @@ def dashboard(request):
 
     return render_to_response('minuteman/dashboard.html', context,
                                 context_instance=RequestContext(request))
-
-
 #-------------------------------------------------------------------------------------------------------------------
-
 @login_required()
 def project_list(request):
 
-    projects = Project.objects.all()
+    all_clients = Client.objects.all()
+    contractors = Contractor.objects.get(user=request.user)
+    logs = Log.objects.filter(contractor=contractors).select_related()
 
+    project_logs = {}
+    for each_log in logs:
+        if each_log.project in project_logs:
+             project_logs[each_log.project] = project_logs[each_log.project] + each_log.duration
 
-    summary_name = []
-    summary_info = []
-
-
-    for each_item in projects:
-        summary_name.append(each_item.name)
-
-    for i in range(len(summary_name)):
-        logs = Log.objects.filter(contractor=request.user, project=summary_name[i])
-        fff = {}
-        if i == 0:
-            pass
         else:
-            summary_info = plcehldr
-
-        for each_project_log in logs:
-            plcehldr = timedelta(0)
-            plcehldr = plcehldr +each_project_log.duration
-
-
-
-
-
-
+            project_logs[each_log.project] = each_log.duration
 
     context = {
-        'summary_name' : summary_name,
-        'summary_info' : summary_info,
-
+        'logs' : logs,
+        'project_logs' : project_logs,
     }
 
     return render_to_response('minuteman/project_summary.html', context,
                                 context_instance=RequestContext(request))
-
-
-
-
-
 #------------------------------------------------------------------------------------------------------------------
-
-
+# read select related
+# gcharts
+# django forms

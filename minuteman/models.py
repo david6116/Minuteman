@@ -8,7 +8,7 @@ class Client(models.Model):
     name = models.CharField(max_length=128)
     email = models.EmailField(max_length=128)
     phone = models.CharField(max_length=20)
-    comments = models.TextField()
+    comments = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
@@ -17,13 +17,12 @@ class Project(models.Model):
     client = models.ForeignKey(Client, related_name='projects')
     name = models.CharField(max_length=128)
     rate = models.FloatField()
-    comments = models.TextField()
+    comments = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
 
     def summary(self):
-
         sum_total = timedelta(0)
         project_req_logs = Log.objects.filter(project=self)
 
@@ -32,14 +31,10 @@ class Project(models.Model):
 
         return sum_total
 
-
-
-
-
 class Contractor(models.Model):
     name = models.CharField(max_length=128)
     rate = models.FloatField()
-    projects = models.ManyToManyField(Project)
+    projects = models.ManyToManyField(Project, related_name='contractors')
     user = models.OneToOneField('auth.User', null=True)
 
     def __unicode__(self):

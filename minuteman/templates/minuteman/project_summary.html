@@ -1,27 +1,32 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>{{ info.first_name }}'s Projects</title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/projectsummary.css" />
-</head>
-<body>
-<div id='navbar'>
-    <ul>
-        <li class='navbarlist'><a href="/{{ static_url }}dashboard/">Your Dashboard</a></li>
-        <li class='navbarlist'><a href="/project_summary/">Project Summary</a></li>
-        <li class='navbarlist'><a href="/admin">Admin</a></li>
-        {% if user.is_authenticated %}
-        <li class='navbarlist'><a href="/logout/">Logout</a></li>
-        {% else %}
-        <li class='navbarlist'><a href="/login/">Log in</a></li>
-        {% endif %}
-    </ul>
-</div>
+<title>Project Stuff</title>
+
+{% extends 'base.html' %}
+{% block content %}
+
+<p id='pageheader'>
+    A look into all that you have done and what it is going to cost me to pay you.
+</p>
+
+<table class='default'>
+    <tr class='tableheader'>
+        <th>Client</th>
+        <th>Project</th>
+        <th>You're Worth</th>
+        <th>Duration</th>
+        <th>Before Taxes</th>
+        <th>Project Notes</th>
+    </tr>
+    {% for project, duration in project_logs.items %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+
+        <td>{{ project.client }}</td>
+        <td>{{ project }}</td>
+        <td>{{ project.rate }}</td>
+        <td>{{ duration }}</td>
+        <td>empty</td>
+        <td>{{ project.comments }}</td>
+    </tr>{% endfor %}
 
 
-{{ summary_info }}
-
-
-</body>
-</html>
+</table>
+{% endblock content %}

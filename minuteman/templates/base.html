@@ -3,8 +3,34 @@
 <html>
 <head>
     <title>{{ title }} - </title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+
 </head>
 <body>
+
+<div id='navbar'>
+    <ul>
+        <li class='navbarlist'><a href="/{{ static_url }}dashboard/">Your Dashboard</a></li>
+        <li class='navbarlist'><a href="/project_summary/">Project Summary</a></li>
+        <li class='navbarlist'><a href="/admin">Admin</a></li>
+        {% if user.is_authenticated %}
+        <li class='navbarlist'><a href="/logout/">Logout</a></li>
+        {% else %}
+        <li class='navbarlist'><a href="/login/">Log in</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+
+
+<h1 id='time'>Today is {% now "l, F jS" %}</h1>
+
+<p id='user'>
+    Hello {{ user.get_full_name }}
+    <br />
+    <a id='logout' href="/logout/">Need to log out?</a>
+</p>
+
 
 {% block content %}
 {% endblock content %}

@@ -10,3 +10,22 @@
     padding-right: 30px;
     background-size: 100%
 }
+
+table{
+    border: 1px solid;
+    border-collapse: collapse;
+    width: 65%;
+    text-align: center;
+    margin-left:auto;
+    margin-right:auto;
+    box-shadow: 1px 1px 8px 1px #00273A;
+}
+
+#header{
+    border: 1px;
+    background-color: #9CCF46
+}
+
+.row1{
+    background-color: blue
+}

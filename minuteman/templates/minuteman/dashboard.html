@@ -1,47 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Minuteman Time Keeper</title>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery-1.7.1.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/web.css" />
+<title>
+    Dashboard
+</title>
 
-</head>
-<body>
-
-<div id='navbar'>
-    <ul>
-        <li class='navbarlist'><a href="/{{ static_url }}dashboard/">Your Dashboard</a></li>
-        <li class='navbarlist'><a href="/project_summary/">Project Summary</a></li>
-        <li class='navbarlist'><a href="/admin">Admin</a></li>
-        {% if user.is_authenticated %}
-        <li class='navbarlist'><a href="/logout/">Logout</a></li>
-        {% else %}
-        <li class='navbarlist'><a href="/login/">Log in</a></li>
-        {% endif %}
-    </ul>
-</div>
-
-<h1 id='time'>Today is {% now "l, F jS" %}</h1>
-
-    <p id='user'>
-        Hello {{ user.get_full_name }}
-        <br />
-        <a id='logout' href="/logout/">Need to log out?</a>
-    </p>
+{% extends 'base.html' %}
+{% block content %}
 
 <div id='table'>
 {% if current_log %}
-
 
 {% else %}
 <p class='oneliner'>Start a new project</p>
 <form action="/dashboard/" method="post" class='startstop'>{% csrf_token %}
 <table id='newproject'>
 
-    <tr id='npfirstrow'>
+    <tr class='tableheader'>
         <th>Project</th>
-        <th>Whatcha planning on to work on?</th>
+        <th>Whatcha planning to work on?</th>
         <th>Ready...Set...</th>
     </tr>
     <tr id='npsecondrow'>
@@ -78,8 +52,8 @@
     
     <p class='oneliner'>Your recent work</p>
     
-    <table id='projects'>
-        <tr id='pfirstrow'>
+    <table class='default'>
+        <tr class='tableheader'>
             <th>Project</th>
             <th>Client</th>
             <th>Time spent</th>
@@ -117,5 +91,4 @@
 
 </div>
 
-</body>
-</html>
+{% endblock content %}
