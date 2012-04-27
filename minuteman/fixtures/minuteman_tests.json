@@ -1,0 +1,197 @@
+[
+    {
+        "pk": 1, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "admin", 
+            "first_name": "David", 
+            "last_name": "Lance", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2012-02-26 13:49:29", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$af52d$343c494e14a417f4f8af7775a522698bbfaca7f6", 
+            "email": "david6116@yahoo.com", 
+            "date_joined": "2012-02-02 13:27:10"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "clay", 
+            "first_name": "Cwaidoh", 
+            "last_name": "McCuddle", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2012-03-01 18:27:33", 
+            "groups": [], 
+            "user_permissions": [            ],
+            "password": "sha1$7facd$25b6505cf85b16cbeb761756b90dc026a7e95631", 
+            "email": "clay@daemons.net", 
+            "date_joined": "2012-02-07 11:08:18"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "cody", 
+            "first_name": "Cody", 
+            "last_name": "Xavier", 
+            "is_active": true, 
+            "is_superuser": false, 
+            "is_staff": true, 
+            "last_login": "2012-03-18 15:47:16", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$4a4b3$9e240f347eb76e8e7c85776ad7d0b0778fbbae7f", 
+            "email": "Cody.Xavier@gmail.com", 
+            "date_joined": "2012-02-20 22:05:38"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "auth.user", 
+        "fields": {
+            "username": "david", 
+            "first_name": "David", 
+            "last_name": "Lance", 
+            "is_active": true, 
+            "is_superuser": true, 
+            "is_staff": true, 
+            "last_login": "2012-04-05 12:42:47", 
+            "groups": [], 
+            "user_permissions": [], 
+            "password": "sha1$dee21$07a198a3cd3a485da75d275c032385e40a1d8ceb", 
+            "email": "david6116@yahoo.com", 
+            "date_joined": "2012-02-26 13:49:57"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "minuteman.client", 
+        "fields": {
+            "phone": "770-770-7770", 
+            "name": "Zehner Group", 
+            "comments": "blah blah", 
+            "email": "Zehner@ZehnerHQ.com"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "minuteman.client", 
+        "fields": {
+            "phone": "404-314-1351", 
+            "name": "Project Evolution", 
+            "comments": "something about him", 
+            "email": "Clay@daemons.net"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "minuteman.project", 
+        "fields": {
+            "rate": 75.0, 
+            "client": 1, 
+            "name": "Canvas", 
+            "comments": "blah di blah"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "minuteman.project", 
+        "fields": {
+            "rate": 75.0, 
+            "client": 2, 
+            "name": "Regis", 
+            "comments": "is this info right"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "minuteman.contractor", 
+        "fields": {
+            "rate": 15.0, 
+            "name": "Deejay", 
+            "projects": [
+                2
+
+            ], 
+            "user": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "minuteman.contractor", 
+        "fields": {
+            "rate": 75.0, 
+            "name": "Clay McClure", 
+            "projects": [
+                1, 
+                2
+            ], 
+            "user": 2
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "minuteman.contractor", 
+        "fields": {
+            "rate": 7.35, 
+            "name": "Cody Xavier", 
+            "projects": [
+                1, 
+                2
+            ], 
+            "user": 3
+        }
+    },
+    {
+        "pk": 1,
+        "model": "minuteman.log",
+        "fields": {
+            "project": 2,
+            "start_time": "1987-05-25 09:01:00",
+            "end_time": "2012-04-06 23:41:00",
+            "comments": "deejay's birth duration 9083, 52800 ",
+            "contractor": 3
+        }
+    },
+    {
+        "pk": 2,
+        "model": "minuteman.log", 
+        "fields": {
+            "project": 2,
+            "start_time": "1977-02-20 11:20:00",
+            "end_time": "2012-04-06 23:41:00",
+            "comments": "clays birth duration 12829, 44460",
+            "contractor": 3
+        }
+    }, 
+    {
+        "pk": 3,
+        "model": "minuteman.log",
+        "fields": {
+            "project": 1,
+            "start_time": "2012-02-25 00:00:00",
+            "end_time": "2012-07-10 00:00:00",
+            "comments": "",
+            "contractor": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "minuteman.log",
+        "fields": {
+            "project": 1,
+            "start_time": "2012-02-29 00:00:00",
+            "end_time": "2012-12-11 00:00:00",
+            "comments": "",
+            "contractor": 3
+        }
+    }
+]

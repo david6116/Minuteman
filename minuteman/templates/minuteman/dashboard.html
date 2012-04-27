@@ -10,7 +10,7 @@
 
 {% else %}
 <p class='oneliner'>Start a new project</p>
-<form action="/dashboard/" method="post" class='startstop'>{% csrf_token %}
+<form action="/start/" method="post" class='startstop'>{% csrf_token %}
 <table id='newproject'>
 
     <tr class='tableheader'>
@@ -20,30 +20,25 @@
     </tr>
     <tr id='npsecondrow'>
         <td>
-            <select name='project'>
-            {% for each_project in projects %}
-            <option value="{{ each_project.id }}">{{ each_project.name }}</option>
-            {% endfor %}
-            </select>
+        {{ form.project }}
     </td>
         <td id='textfield'>
-            <input type='text'  id='text' value='' name="comments">
+            <input type='text'  id='text' value='' name="comments"/>
         </td>
         <td>
-            <input type="hidden" value="{{ user.contractor.id }}" name="contractor">
-            <input type="submit" value="Get Started" name='start' />
+            <button type="submit" name="action" value="start">Get Started!</button>
         </td>
     </tr>
 </table>
 </form>
-
 
 {% endif %}
 </div>
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            <li{% if message.tags %}
+                class="{{ message.tags }}"{% endif %}>{{ message }}</li>
             {% endfor %}
         </ul>
     {% endif %}
@@ -69,17 +64,14 @@
                     <td>{{ each_row.comments }}</td>
                     <td>
                         {% if forloop.first and current_log.project == each_row.project %}
-                                <form action="/dashboard/" method="post" class='startstop'>{% csrf_token %}
+                                <form action="/stop/" method="post" class='startstop'>{% csrf_token %}
                                     <input type='hidden' value="{{ current_log.project.id }}" name="project">
-                                    <input type='hidden' value="{{ current_log.contractor.id }}" name="contractor">
-                                    <input type="submit" value="I'm done!" name='stop' />
-
+                                    <button type="submit" name="action" value="stop">Finish em!</button>
                                 </form>
                         {% else %}
-                           <form action="/dashboard/" method="post" class='startstop'>{% csrf_token %}
+                           <form action="/start/" method="post" class='startstop'>{% csrf_token %}
                                 <input type='hidden' value="{{ each_row.project.id }}" name="project">
-                                <input type="hidden" value="{{ user.contractor.id }}" name="contractor">
-                                <input type="submit" value="Resume" name='resume' />
+                               <button type="submit" name="action" value="resume">Continue on this</button>
                             </form>
 
                         {% endif %}

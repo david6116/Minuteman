@@ -16,17 +16,24 @@
         <th>Before Taxes</th>
         <th>Project Notes</th>
     </tr>
-    {% for project, duration in project_logs.items %}
+    {% for project, info in projects.items %}
     <tr class="{% cycle 'row1' 'row2' %}">
 
         <td>{{ project.client }}</td>
         <td>{{ project }}</td>
-        <td>{{ project.rate }}</td>
-        <td>{{ duration }}</td>
-        <td>empty</td>
+        <td>{{ user.contractor.rate }}</td>
+        <td>{{ info.duration }}</td>
+        <td>${{ info.cost|floatformat:2 }}</td>
         <td>{{ project.comments }}</td>
     </tr>{% endfor %}
 
 
 </table>
+
+    <P>
+        {% for project, money in project_costs.items %}
+        {{ project }}
+            {{ money }}
+    {%endfor%}
+    </P>
 {% endblock content %}

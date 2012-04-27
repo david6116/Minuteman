@@ -1,125 +1,109 @@
-from datetime import datetime
-from GChartWrapper import *
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
 from django.contrib import messages
-from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from minuteman.models import *
+from minuteman.forms import ProjectForm
+from minuteman.models import Log, Project
 
 @login_required()
 def dashboard(request):
 
-    if request.method == 'POST':
-
-        contractor_id = request.POST['contractor']
-        contractor = Contractor.objects.get(pk=int(contractor_id))
-
-        project_id = request.POST['project']
-        project = Project.objects.get(pk=int(project_id))
-
-        if 'start' in request.POST:
-
-            comments = request.POST['comments']
-
-            try:
-                current_project = Log.objects.get(contractor=contractor, stop=None).project
-                if current_project == project:
-                    messages.warning(request,
-                        "Are you working too hard or just playing on facebook, you're already 'working' on %s." % current_project
-                    )
-
-                else:
-                    messages.warning(request,
-                        "We would all like to get paid twice as much, but this isn't the way to do it. End %s first." % current_project
-                    )
-
-            except Log.DoesNotExist:
-                log = Log(contractor=contractor, project=project, start=datetime.now(), stop=None, comments=comments)
-                log.save()
-                messages.success(request,
-                    'Use your abilities at this time to stay focused on your goals. Log recorded'
-                )
-
-        elif 'stop' in request.POST:
-            try:
-                current_log = Log.objects.get(contractor=contractor, stop=None )
-                if current_log.project == project:
-                    current_log.stop = datetime.now()
-                    current_log.save()
-                    messages.success(request,
-                        'I made you a cookie, but I eated it already.'
-                    )
-                else:
-                    messages.warning(request,
-                        "Um... I'm pretty sure you meant to end %s. Try again." % current_log.project
-                )
-
-            except Log.DoesNotExist:
-                messages.warning(request,
-                    'Whoa! You worked so fast you forgot to hit start first, try again.'
-                )
-
-        elif 'resume' in request.POST:
-
-            current_log = Log.objects.get(contractor=contractor, stop=None)
-            current_log.stop = datetime.now()
-            current_log.save()
-
-            log = Log(contractor=contractor, project=project, start=datetime.now(), stop=None)
-            log.save()
-
-            messages.warning(request,
-                "Ending %s and Resuming %s" % (current_log.project, log.project)
-            )
-
-        return HttpResponseRedirect('/dashboard/')
+    form = ProjectForm(contractor=request.user.contractor)
+    lastfive = Log.objects.filter(contractor__user=request.user)
+    lastfive = lastfive.reverse()[:5]
+    projects = Project.objects.all().select_related()
 
     try:
-        current_log = Log.objects.get(contractor=request.user.contractor, stop=None)
+        current_log = Log.objects.get(contractor=request.user.contractor, end_time=None)
     except Log.DoesNotExist:
         current_log = None
 
-    lastfive = Log.objects.filter(contractor__user=request.user)
-    lastfive = lastfive.reverse()[:5]
-    contractors = Contractor.objects.all()
-    projects = Project.objects.all().select_related()
-
     context = {
+        'form': form,
         'projects': projects,
-        'contractors': contractors,
-        'current_log' : current_log,
-        "lastfive" : lastfive,
+        'lastfive': lastfive,
+        'current_log': current_log,
     }
 
     return render_to_response('minuteman/dashboard.html', context,
                                 context_instance=RequestContext(request))
-#-------------------------------------------------------------------------------------------------------------------
+
 @login_required()
-def project_list(request):
+def project_summary(request):
 
-    all_clients = Client.objects.all()
-    contractors = Contractor.objects.get(user=request.user)
-    logs = Log.objects.filter(contractor=contractors).select_related()
+    logs = Log.objects.filter(contractor=request.user.contractor)
 
-    project_logs = {}
+    projects = {}
+    project_costs = {}
+    rate = request.user.contractor.rate / 60.00 / 60.00
+
     for each_log in logs:
-        if each_log.project in project_logs:
-             project_logs[each_log.project] = project_logs[each_log.project] + each_log.duration
+        if each_log.project in projects:
+            projects[each_log.project]['duration'] += each_log.duration.total_seconds()
+            projects[each_log.project]['cost'] += each_log.duration.total_seconds() * rate
 
         else:
-            project_logs[each_log.project] = each_log.duration
+            projects[each_log.project] = {
+                'duration': each_log.duration.total_seconds(),
+                'cost' : each_log.duration.total_seconds() * rate,
+                'client' : each_log.project.client
+            }
 
     context = {
-        'logs' : logs,
-        'project_logs' : project_logs,
+        'projects' : projects,
     }
 
     return render_to_response('minuteman/project_summary.html', context,
                                 context_instance=RequestContext(request))
-#------------------------------------------------------------------------------------------------------------------
-# read select related
-# gcharts
-# django forms
+
+
+@login_required()
+def project_total(request):
+
+
+
+
+
+
+    return render_to_response('minuteman/project_total.html',
+        context_instance=RequestContext(request))
+
+
+@login_required()
+def start(request):
+
+    if request.method == 'POST':
+        form = ProjectForm(request.user.contractor, request.POST)
+        if form.is_valid():
+            project = form.cleaned_data['project']
+            comments = form.cleaned_data['comments']
+
+            try:
+                current_log = Log.objects.get(contractor=request.user.contractor, end_time=None)
+            except Log.DoesNotExist:
+                pass
+            else:
+                current_log.stop()
+
+            Log.start(project=project, contractor=request.user.contractor, comments=comments)
+            return HttpResponseRedirect('/dashboard/')
+        else:
+            return HttpResponseBadRequest("You're shit an't valid")
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
+@login_required()
+def stop(request):
+
+    if request.method == 'POST':
+        form = ProjectForm(request.user.contractor, request.POST)
+        if form.is_valid():
+            current_log = Log.objects.get(contractor=request.user.contractor, end_time=None)
+            current_log.stop()
+            return HttpResponseRedirect('/dashboard/')
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseNotAllowed(['POST'])

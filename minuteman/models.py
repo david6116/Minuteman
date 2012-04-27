@@ -1,10 +1,16 @@
-from datetime import *
+from datetime import timedelta, datetime
 
 from django.db import models
 
-# This comment space is needed for random stuff
-
 class Client(models.Model):
+    """
+    Creating a client instance
+
+    >>> a_client = Client.objects.create(name='david', email='david6116@yahoo.com', phone=7706338574, comments='optional')
+    >>> a_client.name
+    'david'
+    >>>
+    """
     name = models.CharField(max_length=128)
     email = models.EmailField(max_length=128)
     phone = models.CharField(max_length=20)
@@ -14,6 +20,7 @@ class Client(models.Model):
         return self.name
 
 class Project(models.Model):
+
     client = models.ForeignKey(Client, related_name='projects')
     name = models.CharField(max_length=128)
     rate = models.FloatField()
@@ -23,6 +30,11 @@ class Project(models.Model):
         return self.name
 
     def summary(self):
+        """
+        Summary takes an instance of a Project and returns the total
+        a mount of time spent on that Project as a timedelta.
+
+       """
         sum_total = timedelta(0)
         project_req_logs = Log.objects.filter(project=self)
 
@@ -40,28 +52,51 @@ class Contractor(models.Model):
     def __unicode__(self):
         return self.name
 
-    #contractor, project, start, stop
 class Log(models.Model):
     contractor = models.ForeignKey(Contractor)
     project = models.ForeignKey(Project)
-    start = models.DateTimeField()
-    stop = models.DateTimeField(blank=True, null=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(blank=True, null=True)
     comments = models.TextField(blank=True)
 
     class Meta:
-        ordering = ('start',)
+        ordering = ('id',)
 
     def __unicode__(self):
-        return u'%s, %s, %s, %s' % (self.contractor, self.project, self.start, self.stop)
+        return u'%s, %s, %s, %s' % (self.contractor, self.project, self.start_time, self.end_time)
 
     @property
     def duration(self):
+        """
+        Takes a log instance and calculates the time spent on a project
+        the log can still be active or can be a completed log.
 
-        if self.stop is None:
-            difference = datetime.now() - self.start
+        >>> log = Log(start_time=datetime(2012, 4, 6, 18, 44, 10, 998637),
+        ...             end_time=datetime(2012, 4, 6, 18, 46, 8, 386904))
+        >>> log.duration
+        datetime.timedelta(0, 117, 388267)
+        """
+
+
+        if self.end_time is None:
+            difference = datetime.now() - self.start_time
         else:
-            difference = self.stop - self.start
+            difference = self.end_time - self.start_time
         return difference
 
+    def stop(self):
+        assert(self.end_time is None)
+        self.end_time = datetime.now()
+        self.save()
 
+    @classmethod
+    def start(cls, project, contractor, comments=""):
+        try:
+            Log.objects.get(contractor=contractor, end_time=None)
+            raise Exception('hey stupid your log isnt instantiating')
 
+        except Log.DoesNotExist:
+            new_log = Log(project=project, contractor=contractor, start_time=datetime.now(), comments=comments)
+            new_log.start_time = datetime.now()
+            new_log.save()
+            return new_log

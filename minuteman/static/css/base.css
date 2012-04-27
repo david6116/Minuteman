@@ -6,6 +6,8 @@ body {
     background-position: 0% 0% top;
     background-repeat: no-repeat;
     font-family: arial, helvetica;
+
+
 }
 
 #navbar{
@@ -93,4 +95,22 @@ td, th{
 
 #pageheader{
     text-align: center
+}
+
+
+
+
+
+
+
+
+
+
+.login{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.loginbutton{
+    padding-left: 20em
 }
