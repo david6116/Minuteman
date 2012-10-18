@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -70,8 +70,8 @@ def project_total(request):
     return render_to_response('minuteman/project_total.html',
         context_instance=RequestContext(request))
 
-
-@login_required()
+@csrf_exempt
+@login_required
 def start(request):
 
     if request.method == 'POST':
@@ -94,7 +94,8 @@ def start(request):
     else:
         return HttpResponseNotAllowed(['POST'])
 
-@login_required()
+@csrf_exempt
+@login_required
 def stop(request):
 
     if request.method == 'POST':

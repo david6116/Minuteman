@@ -4,10 +4,15 @@
 <head>
     <title>{{ title }} - </title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css" />
+    <script type="text/javascript" src="/static/js/jquery-1.7.1.js"></script>
+    <script type="text/javascript" src="/static/js/mm.js"></script>
 
 </head>
 <body>
 {% if user.is_authenticated %}
+
+<h1 id='time'>Today is {% now "l, F jS" %}</h1>
+
 <div id='navbar'>
     <ul>
         <li class='navbarlist'><a href="/{{ static_url }}dashboard/">Your Dashboard</a></li>
@@ -21,14 +26,13 @@
 {% endif %}
 
 
-<h1 id='time'>Today is {% now "l, F jS" %}</h1>
-
 {% if user.is_authenticated %}
-<p id='user'>
+<div id='user'>
+<p>
     Hello {{ user.get_full_name }}
-    <br />
     <a id='logout' href="/logout/">Need to log out?</a>
 </p>
+</div>
 {% endif %}
 
 

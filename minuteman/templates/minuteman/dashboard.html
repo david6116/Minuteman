@@ -13,7 +13,7 @@
 <form action="/start/" method="post" class='startstop'>{% csrf_token %}
 <table id='newproject'>
 
-    <tr class='tableheader'>
+    <tr class='projectbanner'>
         <th>Project</th>
         <th>Whatcha planning to work on?</th>
         <th>Ready...Set...</th>
@@ -26,7 +26,7 @@
             <input type='text'  id='text' value='' name="comments"/>
         </td>
         <td>
-            <button type="submit" name="action" value="start">Get Started!</button>
+            <button class="start" type="submit" name="action" value="start">Get Started!</button>
         </td>
     </tr>
 </table>
@@ -57,24 +57,24 @@
         </tr>
 
             {% for each_row in lastfive %}
-                <tr class="{% cycle 'row1' 'row2' %}">
+                <tr class="{% cycle 'rows' 'rows' %}">
                     <td>{{ each_row.project }}</td>
                     <td>{{ each_row.project.client }}</td>
                     <td>{{ each_row.duration }}</td>
                     <td>{{ each_row.comments }}</td>
                     <td>
-                        {% if forloop.first and current_log.project == each_row.project %}
-                                <form action="/stop/" method="post" class='startstop'>{% csrf_token %}
+                        {% if forloop.first %}
+                                <form action="/stop/" method="post" class='stop'>{% csrf_token %}
                                     <input type='hidden' value="{{ current_log.project.id }}" name="project">
-                                    <button type="submit" name="action" value="stop">Finish em!</button>
+                                    <button id='finish' type="submit" name="action" value="stop" {% if current_log.project != each_row.project %} style="display: none;" {% endif %}>Finish em!</button>
                                 </form>
-                        {% else %}
-                           <form action="/start/" method="post" class='startstop'>{% csrf_token %}
+                        {% endif %}
+                           <form action="/start/" method="post" class='start'>{% csrf_token %}
                                 <input type='hidden' value="{{ each_row.project.id }}" name="project">
-                               <button type="submit" name="action" value="resume">Continue on this</button>
+                               <button class='continue' type="submit" name="action" value="resume" {% if current_log.project == each_row.project %} style="display: none;" {% endif %}>Continue on this</button>
                             </form>
 
-                        {% endif %}
+
                     </td>
                 </tr>
             {% endfor %}

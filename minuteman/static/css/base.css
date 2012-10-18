@@ -1,37 +1,32 @@
 body {
     font-size: 15pt;
     color: #020202;
-    background: #E8ECFF;
-    background-image: url('../img/rocketsmall.png');
-    background-position: 0% 0% top;
-    background-repeat: no-repeat;
-    font-family: arial, helvetica;
-
-
+    background: #E8ECFF url('../img/rocketsmall.png') no-repeat;
+    font-family: arial, helvetica, sans-serif
 }
 
-#navbar{
-
-    margin: auto;
+#navbar {
     text-align: right;
 }
-.navbarlist
-{
-    display:block;
-    display:inline;
+
+.navbarlist {
+    display : inline;
     padding-right: 30px;
     background-size: 100%
 }
-h1 {
-    font-size: 75%;
+
+#time {
     text-align: center;
-    margin-top: 5px;
-    margin-bottom: 0;
+    font-size: 75%;
 }
-#logout{
+
+#logout {
+    display: block;
+    text-align: right;
     font-size: 7pt;
 }
-#newproject{
+
+#newproject {
     background-color: #FFFABF;
     border: 1px solid;
     border-collapse: collapse;
@@ -41,76 +36,84 @@ h1 {
     margin-right:auto;
     box-shadow: 1px 1px 8px 1px #00273A;
 }
-#textfield{
-    padding: 0px;
-    margin: 0px;
-    element: 0
-}
-#text{
-    width: 600px;
+
+#text {
+    display: block;
+    width: 101%;
     height: 22px;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     border: 0;
 }
-#npsecondrow{
+
+#npsecondrow {
     background-color: #D4EADE;
 }
-.oneliner{
+
+.oneliner {
     text-align: center;
 }
-.messages{
+
+.messages {
     list-style: none;
     padding-top: 20px;
     text-align: center;
 }
-.current_log{
-    text: center;
-}
+
 #user {
+    display: block;
     text-align: right;
 }
-.default{
+.default {
     border: 1px solid;
     border-collapse: collapse;
     width: 100%;
     text-align: center;
     box-shadow: 1px 1px 8px 1px #00273a;
 }
-.tableheader{
+
+.tableheader {
     background-color: #FFFABF;
 }
-.row1{
+.rows {
+    height: 41px;
+}
+
+.row1 {
     background: #D4EADE
 }
-.row2{
+
+.row2 {
     background: #d5e2ec;
 }
-td, th{
+td, th {
     border: 1px solid;
 }
-.table{
 
-}
-
-#pageheader{
+#pageheader {
     text-align: center
 }
 
-
-
-
-
-
-
-
-
-
-.login{
+.login {
     margin-left: auto;
     margin-right: auto;
 }
 
-.loginbutton{
+.loginbutton {
     padding-left: 20em
+}
+
+.green{
+    color: green;
+}
+
+#error {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#loginbtn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
