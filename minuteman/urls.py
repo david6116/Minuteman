@@ -14,4 +14,5 @@ urlpatterns = patterns('',
 #    url(r'^register/$', 'minuteman.views.register'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^send_invoice/', 'minuteman.views.send_invoice'),
 )

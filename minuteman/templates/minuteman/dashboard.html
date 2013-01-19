@@ -5,82 +5,87 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div id='table'>
-{% if current_log %}
+<div class='container-fluid'>
+    <h1 style="text-align: center">Today is {% now "l, F jS" %}</h1>
+    <div id='table'>
+    <p class='oneliner' {% if current_log %}style="display:none;"{% endif %}>Start a new project</p>
+    <form action="/start/" method="post" class='startstop'>{% csrf_token %}
+    <table class="table" {% if current_log %} style="display:none;"{% endif %}>
 
-{% else %}
-<p class='oneliner'>Start a new project</p>
-<form action="/start/" method="post" class='startstop'>{% csrf_token %}
-<table id='newproject'>
-
-    <tr class='projectbanner'>
-        <th>Project</th>
-        <th>Whatcha planning to work on?</th>
-        <th>Ready...Set...</th>
-    </tr>
-    <tr id='npsecondrow'>
-        <td>
-        {{ form.project }}
-    </td>
-        <td id='textfield'>
-            <input type='text'  id='text' value='' name="comments"/>
-        </td>
-        <td>
-            <button class="start" type="submit" name="action" value="start">Get Started!</button>
-        </td>
-    </tr>
-</table>
-</form>
-
-{% endif %}
-</div>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %}
-                class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-<div id='pjt_lsit'>
-    
-    <p class='oneliner'>Your recent work</p>
-    
-    <table class='default'>
-        <tr class='tableheader'>
+        <tr class='projectbanner'>
             <th>Project</th>
-            <th>Client</th>
-            <th>Time spent</th>
-            <th>What you were doing</th>
-            <th>Action</th>
+            <th>Whatcha planning to work on?</th>
+            <th>Ready...Set...</th>
         </tr>
-
-            {% for each_row in lastfive %}
-                <tr class="{% cycle 'rows' 'rows' %}">
-                    <td>{{ each_row.project }}</td>
-                    <td>{{ each_row.project.client }}</td>
-                    <td>{{ each_row.duration }}</td>
-                    <td>{{ each_row.comments }}</td>
-                    <td>
-                        {% if forloop.first %}
-                                <form action="/stop/" method="post" class='stop'>{% csrf_token %}
-                                    <input type='hidden' value="{{ current_log.project.id }}" name="project">
-                                    <button id='finish' type="submit" name="action" value="stop" {% if current_log.project != each_row.project %} style="display: none;" {% endif %}>Finish em!</button>
-                                </form>
-                        {% endif %}
-                           <form action="/start/" method="post" class='start'>{% csrf_token %}
-                                <input type='hidden' value="{{ each_row.project.id }}" name="project">
-                               <button class='continue' type="submit" name="action" value="resume" {% if current_log.project == each_row.project %} style="display: none;" {% endif %}>Continue on this</button>
-                            </form>
-
-
-                    </td>
-                </tr>
-            {% endfor %}
-
+        <tr id='npsecondrow'>
+            <td>
+            {{ form.project }}
+        </td>
+            <td id='textfield'>
+                <input type='text'  id='text' value='' name="comments"/>
+            </td>
+            <td>
+                <button class="start btn btn-success" type="submit" name="action" value="start">Get Started!</button>
+            </td>
+        </tr>
     </table>
+    </form>
 
+    </div>
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %}
+                    class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    <div class="row show-grid">
+
+        <div class="span9 offset2">
+            <div id='pjt_lsit'>
+
+                <p class='oneliner'>Your recent work</p>
+
+                <table class='table table-striped table-condensed'>
+                    <thead class='tableheader'>
+                        <tr>
+                            <th>Project</th>
+                            <th>Client</th>
+                            <th>Time spent</th>
+                            <th>What you were doing</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-hover">
+                        {% for each_row in lastfive %}
+                        <tr class="{% cycle 'rows' 'rows' %}">
+                            <td>{{ each_row.project }}</td>
+                            <td>{{ each_row.project.client }}</td>
+                            <td>{{ each_row.duration }}</td>
+                            <td>{{ each_row.comments }}</td>
+                            <td class='farRight'>
+                                {% if forloop.first %}
+                                        <form action="/stop/" method="post" class='stop'>{% csrf_token %}
+                                            <input type='hidden' value="{{ current_log.project.id }}" name="project">
+                                            <button id='finish' class="btn btn-danger" type="submit" name="action" value="stop" {% if current_log.project != each_row.project %} style="display: none;" {% endif %}>Finish em!</button>
+                                        </form>
+                                {% endif %}
+                                   <form action="/start/" method="post" class='start'>{% csrf_token %}
+                                        <input type='hidden' value="{{ each_row.project.id }}" name="project">
+                                       <button class='continue btn btn-primary' type="submit" name="action" value="resume" {% if current_log.project == each_row.project %} style="display: none;" {% endif %}>Continue on this</button>
+                                    </form>
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
