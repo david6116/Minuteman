@@ -7,7 +7,7 @@
 
 <div class='container-fluid'>
     <h1 style="text-align: center">Today is {% now "l, F jS" %}</h1>
-    <div id='table'>
+    <div id='table' class="newproject">
     <p class='oneliner' {% if current_log %}style="display:none;"{% endif %}>Start a new project</p>
     <form action="/start/" method="post" class='startstop'>{% csrf_token %}
     <table class="table" {% if current_log %} style="display:none;"{% endif %}>

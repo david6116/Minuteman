@@ -6,13 +6,13 @@ from django.template import RequestContext
 import requests
 import json
 
-from minuteman.forms import ProjectForm
+from minuteman.forms import LogForm
 from minuteman.models import Log, Project
 
 @login_required()
 def dashboard(request):
 
-    form = ProjectForm(contractor=request.user.contractor)
+    form = LogForm(contractor=request.user.contractor)
     lastfive = Log.objects.filter(contractor__user=request.user)
     lastfive = lastfive.reverse()[:5]
     projects = Project.objects.all().select_related()
@@ -68,13 +68,20 @@ def project_total(request):
 
     return render_to_response('minuteman/project_total.html',
         context_instance=RequestContext(request))
+#
+#@login_required()
+#def create_project(request):
+#     if request.method == 'POST':
+#         form = NewProject(requst.project)
+
+
 
 @csrf_exempt
 @login_required
 def start(request):
 
     if request.method == 'POST':
-        form = ProjectForm(request.user.contractor, request.POST)
+        form = LogForm(request.user.contractor, request.POST)
         if form.is_valid():
             project = form.cleaned_data['project']
             comments = form.cleaned_data['comments']
@@ -89,7 +96,7 @@ def start(request):
             Log.start(project=project, contractor=request.user.contractor, comments=comments)
             return HttpResponseRedirect('/dashboard/')
         else:
-            return HttpResponseBadRequest("You're shit an't valid")
+            return HttpResponseBadRequest("You're shit ain't valid")
     else:
         return HttpResponseNotAllowed(['POST'])
 
@@ -98,7 +105,7 @@ def start(request):
 def stop(request):
 
     if request.method == 'POST':
-        form = ProjectForm(request.user.contractor, request.POST)
+        form = LogForm(request.user.contractor, request.POST)
         if form.is_valid():
             current_log = Log.objects.get(contractor=request.user.contractor, end_time=None)
             current_log.stop()

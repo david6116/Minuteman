@@ -46,7 +46,7 @@ class Project(models.Model):
 class Contractor(models.Model):
     name = models.CharField(max_length=128)
     rate = models.FloatField()
-    projects = models.ManyToManyField(Project, related_name='contractors')
+    projects = models.ManyToManyField(Project, related_name='contractors', blank=True)
     user = models.OneToOneField('auth.User', null=True)
 
     def __unicode__(self):
