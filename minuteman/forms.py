@@ -9,3 +9,6 @@ class LogForm(forms.Form):
     def __init__(self, contractor, *args, **kwargs):
         super(LogForm, self).__init__(*args, **kwargs)
         self.fields['project'].queryset = Project.objects.filter(contractors=contractor)
+
+class ProjectForm(forms.Form):
+    pass

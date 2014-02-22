@@ -23,7 +23,7 @@ class Project(models.Model):
 
     client = models.ForeignKey(Client, related_name='projects')
     name = models.CharField(max_length=128)
-    rate = models.FloatField()
+    rate = models.FloatField(default=0.00)
     comments = models.TextField(blank=True)
 
     def __unicode__(self):

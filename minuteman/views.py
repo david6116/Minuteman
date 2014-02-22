@@ -7,7 +7,8 @@ import requests
 import json
 
 from minuteman.forms import LogForm
-from minuteman.models import Log, Project
+from minuteman.forms import ProjectForm
+from minuteman.models import Log, Project, Client
 
 @login_required()
 def dashboard(request):
@@ -68,13 +69,23 @@ def project_total(request):
 
     return render_to_response('minuteman/project_total.html',
         context_instance=RequestContext(request))
-#
-#@login_required()
-#def create_project(request):
-#     if request.method == 'POST':
-#         form = NewProject(requst.project)
 
-
+@login_required()
+def create_project(request):
+     if request.method == 'POST':
+         form = ProjectForm(request.POST)
+         if form.is_valid():
+            try:
+                assignuser = request.user.contractor
+                clientobject = Client.objects.get(id=request.POST['clientid'])
+                newproject = Project.objects.create(client=clientobject, name=request.POST['name'])
+                assignuser.projects.add(newproject)
+            except Exception:
+                print("FAIL")
+         else:
+            print('fail')
+     else:
+         print('fail')
 
 @csrf_exempt
 @login_required
